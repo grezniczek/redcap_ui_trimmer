@@ -110,6 +110,23 @@ class EMi18nPolyfill {
 	}
 
 	/**
+	 * Adds many language strings (without interpolation) to the Javascript store.
+	 * 
+	 * @param Array $keys A simple (not associative) array of keys.
+	 */
+	public static function addManyToLanguageStore($keys) {
+		if (count($keys)) {
+			echo "<script>";
+			foreach ($keys as $key) {
+				$js_string = json_encode($this->tt($key));
+				$js_key = json_encode(self::constructLanguageKey($this->module->PREFIX, $key));
+				echo '$lang.add('. $js_key . ', ' . $js_string . '); ';
+			}
+			echo "</script>";
+		}
+	}
+
+	/**
 	 * Adds a value directly to the $lang JavaScript store. 
 	 * Value can be anything (string, boolean, array).
 	 * 
@@ -299,6 +316,19 @@ class TranslatableExternalModule extends AbstractExternalModule {
             $this->i18n_polyfill == null ? $this->framework->addToJSLanguageStore($key) : $this->i18n_polyfill->addToJSLanguageStore($key);
         }
     }
+
+	/**
+	 * Adds many language strings (without interpolation) to the Javascript
+	 * store.
+	 * @param Array $keys A simple (not associative) array of keys.
+	 */
+	public function addManyToLanguageStore($keys) {
+		// Proxy.
+		$this->i18n_polyfill == null ? 
+			$this->framework->addManyToLanguageStore($keys) : 
+			$this->i18n_polyfill->addManyToLanguageStore($keys);
+		}
+	}
 
     /**
      * Adds a value directly to the $lang JavaScript store. 
