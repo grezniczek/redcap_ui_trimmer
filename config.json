@@ -1,0 +1,98 @@
+{
+    "name": "UI Trimmer",
+    "tt_name": "module_name",
+    "namespace": "RUB\\UITrimmerExternalModule",
+    "description": "A REDCap External Module to remove some of REDCap's menus and other UI elements. <strong><a href=\"https://github.com/grezniczek/redcap_ui_trimmer\">See full documentation here</a></strong>.",
+    "tt_description": "module_desc",
+    "documentation": "README.md",
+    "tt_documentation": "module_docs",
+    "authors": [
+        {
+            "name": "Günther Rezniczek",
+            "email": "guenther.rezniczek@rub.de",
+            "institution": "Ruhr-Universität Bochum"
+        }
+    ],
+    "framework-version": 2,
+    "permissions": [
+        "redcap_every_page_top"
+    ],
+    "enable-every-page-hooks-on-system-pages": true,
+    "system-settings": [
+        {
+            "key": "debug_mode",
+            "name": "Debug Mode (JavaScript is <b>not</b> inlined)",
+            "tt_name": "debug_mode",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "even_for_superuser",
+            "name": "Enable even for Super Users (by default, <b>nothing is removed for Super Users</b>)",
+            "tt_name": "even_for_superuser",
+            "type": "checkbox",
+            "repeatable": false
+        }
+    ],
+    "project-settings": [
+        {
+            "key": "info_remove_from_menu",
+            "name": "Remove items from <b>REDCap's menu</b> (project pages)",
+            "tt_name": "info_remove_from_menu",
+            "type": "descriptive"
+        },
+        {
+            "key": "remove_codebook_link",
+            "name": "Remove <i>Codebook</i> link from menu",
+            "tt_name": "remove_codebook_link",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "remove_empty_menu_sections",
+            "name": "Remove all <i>empty</i> menu sections",
+            "tt_name": "remove_empty_menu_sections",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "info_remove_from_project_home",
+            "name": "Remove items from <b>Project Home</b>",
+            "tt_name": "info_remove_from_project_home",
+            "type": "descriptive"
+        },
+        {
+            "key": "remove_current_users",
+            "name": "Remove the <i>Current Users</i> box",
+            "tt_name": "remove_current_users",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "remove_upcoming_events",
+            "name": "Remove the <i>Upcoming Calender Events</i> box",
+            "tt_name": "remove_upcoming_events",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "info_remove_from_dataentrypages",
+            "name": "Remove items from <b>Data Entry</b> pages",
+            "tt_name": "info_remove_from_dataentrypages",
+            "type": "descriptive"
+        },
+        {
+            "key": "remove_top_actions",
+            "name": "Remove the <i>Actions</> at the top of data entry pages",
+            "tt_name": "remove_top_actions",
+            "type": "checkbox",
+            "repeatable": false
+        }
+    ],
+    "compatibility": {
+        "php-version-min": "5.6.0",
+        "php-version-max": "",
+        "redcap-version-min": "8.1.0",
+        "redcap-version-max": ""
+     }
+}
