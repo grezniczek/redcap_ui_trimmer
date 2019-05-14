@@ -95,44 +95,23 @@ if (!defined("EM_i18n_POLYFILL_DECLARED")) {
             }
         }
 
-	/**
-	 * Adds many language strings (without interpolation) to the Javascript store.
-	 * 
-	 * @param Array $keys A simple (not associative) array of keys.
-	 */
-	public static function addManyToLanguageStore($keys) {
-		if (count($keys)) {
-			echo "<script>";
-			foreach ($keys as $key) {
-				$js_string = json_encode($this->tt($key));
-				$js_key = json_encode(self::constructLanguageKey($this->module->PREFIX, $key));
-				echo '$lang.add('. $js_key . ', ' . $js_string . '); ';
-			}
-			echo "</script>";
-		}
-	}
-
-	/**
-	 * Adds a value directly to the $lang JavaScript store. 
-	 * Value can be anything (string, boolean, array).
-	 * 
-	 * @param string $key The language key.
-	 * @param mixed $value The corresponding value.
-	 */
-	public function addNewToJSLanguageStore($key, $value) {
-		// Encode for JS.
-		$js_value = json_encode($value);
-		$js_key = json_encode(self::constructLanguageKey($this->module->PREFIX, $key));
-		// Add script to add key/value pair to $lang.
-		echo '<script>$lang.add('. $js_key . ', ' . $js_value . ')</script>';
-		}
-		
-    /**
-	 * Generates a key for the $lang global from a module prefix and a module-scope language file key.
-	 */
-	private static function constructLanguageKey($prefix, $key) {
-		return self::EM_LANG_PREFIX . "{$prefix}_{$key}";
-	}
+        /**
+         * Adds an interpolated language string to the JavaScript store by its key.
+         * To add a raw value, do not supply any values.
+         * 
+         * @param string $key The language key.
+         * @param mixed $values The values to be used for interpolation.
+         */
+        public function addToJSLanguageStore($key, ...$values) {
+            // Check if first argument is an array.
+            if (count($values) && is_array($values[0])) $values = $values[0];
+            // Encode for JS.
+            $js_string = json_encode(count($values) ? 
+                $this->tt($key, $values) : $this->tt($key));
+            $js_key = json_encode(self::constructLanguageKey($this->module->PREFIX, $key));
+            // Add script to add key/value pair to $lang.
+            echo '<script>$lang.add('. $js_key . ', ' . $js_string . ')</script>';
+        }
 
         /**
          * Adds many language strings (without interpolation) to the Javascript store.
@@ -330,27 +309,14 @@ if (!defined("EM_i18n_POLYFILL_DECLARED")) {
             }
         }
 
-	/**
-	 * Adds many language strings (without interpolation) to the Javascript
-	 * store.
-	 * @param Array $keys A simple (not associative) array of keys.
-	 */
-	public function addManyToLanguageStore($keys) {
-		// Proxy.
-		$this->i18n_polyfill == null ? 
-			$this->framework->addManyToLanguageStore($keys) : 
-			$this->i18n_polyfill->addManyToLanguageStore($keys);
-		}
-	}
-
-    /**
-     * Adds a value directly to the $lang JavaScript store. 
-     * Value can be anything (string, boolean, array).
-     * 
-     * @param string $key The language key.
-     * @param mixed $value The corresponding value.
-     */
-    public function addNewToJSLanguageStore($key, $value) {
+        /**
+         * Adds an interpolated language string to the JavaScript store by its key.
+         * To add a raw value, do not supply any values.
+         * 
+         * @param string $key The language key.
+         * @param mixed $values The values to be used for interpolation.
+         */
+        public function addToJSLanguageStore($key, ...$values) {
             // Proxy.
             if (count($values)) {
                 $this->i18n_polyfill == null ? $this->framework->addToJSLanguageStore($key, $values) : $this->i18n_polyfill->addToJSLanguageStore($key, $values);
