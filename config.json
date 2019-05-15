@@ -43,8 +43,15 @@
         },
         {
             "key": "remove_codebook_link",
-            "name": "Remove <i>Codebook</i> link from menu",
+            "name": "Remove the <i>My Projects</i> link from menu",
             "tt_name": "remove_codebook_link",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "remove_myprojects_link",
+            "name": "Remove the <i>Codebook</i> link from menu",
+            "tt_name": "remove_myprojects_link",
             "type": "checkbox",
             "repeatable": false
         },
@@ -85,6 +92,26 @@
             "key": "remove_top_actions",
             "name": "Remove the <i>Actions</> at the top of data entry pages",
             "tt_name": "remove_top_actions",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "info_remove_from_loginpage",
+            "name": "Remove items from the <b>Login</b> page",
+            "tt_name": "info_remove_from_loginpage",
+            "type": "descriptive"
+        },
+        {
+            "key": "remove_forgot_password",
+            "name": "Remove the <i>Forgot your password?</i> link",
+            "tt_name": "remove_forgot_password",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "remove_items_below_login",
+            "name": "Remove the items <i>below</> the line under the 'Log In' button",
+            "tt_name": "remove_items_below_login",
             "type": "checkbox",
             "repeatable": false
         }

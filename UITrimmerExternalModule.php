@@ -34,6 +34,11 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
             $this->includeScriptlet("remove-codebook-link");
         }
 
+        // Remove My Projects link.
+        if ($doIt && $this->settings->removeMyProjectsLink) {
+            $this->includeScriptlet("remove_myprojects_link");
+        }
+
         // Remove empty menu sections.
         if ($doIt && $this->settings->removeEmptyMenuSections) {
             $this->includeScriptlet("remove_empty_menu_sections");
@@ -52,6 +57,16 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
         // Remove Action buttons on data entry pages.
         if ($doIt && $this->settings->removeTopActions) {
             $this->includeScriptlet("remove_top_actions");
+        }
+
+        // Remove Forgot your password link on the login page.
+        if ($doIt && $this->settings->removeForgotPasswordLink) {
+            $this->includeScriptlet("remove_forgot_password");
+        }
+
+        // Remove items below login on the login page.
+        if ($doIt && $this->settings->removeItemsBelowLogin) {
+            $this->includeScriptlet("remove_items_below_login");
         }
 
         // Reveal
@@ -107,6 +122,26 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
                     eltoremove.remove();
                 }
             })",
+        "remove_forgot_password" => 
+            "$(function() {
+                const eltoremove = $('a[href*=\"Authentication/password_recovery\"')
+                if (eltoremove.length == 1) {
+                    const parent = eltoremove.parent()
+                    eltoremove.remove()
+                    if (parent.text().trim().length == 0) {
+                        parent.remove();
+                    }
+                }
+            })",
+        "remove_items_below_login" => 
+            "$(function() {
+                const eltoremove = $('div#left_col').siblings('div.row')
+                if (eltoremove.length == 1) {
+                    eltoremove.remove()
+                }
+            })",
+        "remove_myprojects_link" => 
+            "",
     );
 
     private function includeScriptlet($name) {
@@ -130,10 +165,13 @@ class UITrimmerSettings {
     public $forSuperUsers = false;
     
     public $removeCodebookLink = false;
+    public $removeMyProjectsLink = false;
     public $removeEmptyMenuSections = false;
     public $removeCurrentUsersBox = false;
     public $removeUpcomingEventsBox = false;
     public $removeTopActions = false;
+    public $removeForgotPasswordLink = false;
+    public $removeItemsBelowLogin = false;
 
     function __construct($module) 
     {
@@ -145,10 +183,13 @@ class UITrimmerSettings {
         // Settings in the context of a project.
         if ($this->isProject) {
             $this->removeCodebookLink = $this->getPS("remove_codebook_link", false);
+            $this->removeMyProjectsLink = $this->getPS("remove_myprojects_link", false);
             $this->removeCurrentUsersBox = $this->getPS("remove_current_users", false);
             $this->removeUpcomingEventsBox = $this->getPS("remove_upcoming_events", false);
             $this->removeEmptyMenuSections = $this->getPS("remove_empty_menu_sections", false);
             $this->removeTopActions = $this->getPS("remove_top_actions", false);
+            $this->removeForgotPasswordLink = $this->getPS("remove_forgot_password", false);
+            $this->removeItemsBelowLogin = $this->getPS("remove_items_below_login", false);
         }
     }
 
