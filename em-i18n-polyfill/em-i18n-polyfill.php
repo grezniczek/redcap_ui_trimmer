@@ -35,15 +35,7 @@ if (!defined("EM_i18n_POLYFILL_DECLARED")) {
 
         function __construct($module) {
             $this->module = $module;
-            $moduleDirName = "{$module->PREFIX}_{$module->VERSION}";
-            $thisFileDir = dirname(__FILE__);
-
-            if (strpos($thisFileDir, dirname(APP_PATH_DOCROOT)) === false ||
-                strpos($thisFileDir, $moduleDirName) === false) {
-                throw new \Exception("The 'EMi18nPolyfill' class must be included from a file that is within the directory of module '{$module->PREFIX}'.");
-            }
         }
-
 
         /**
          * Returns the translation for the given language file key.
@@ -69,6 +61,20 @@ if (!defined("EM_i18n_POLYFILL_DECLARED")) {
                 self::interpolateLanguageString($text, $values) :
                 $text;
         }
+
+       	/**
+         * Returns a JSON-encoded translation for the given global language key.
+         * 
+         * @param string $key The language key.
+         * @param mixed $values The values to be used for interpolation. If the first parameter is a (sequential) array, it's members will be used and any further parameters ignored.
+         * 
+         * @return string The translation (with interpolations) encoded for assignment to JS variables.
+         */
+        public function tt_js($key, ...$values) {
+            $text = count($values) ? $this->tt($key, $values) : $this->tt($key);
+            return json_encode($text);
+        }
+
 
         /**
          * Declares to the EM framework that language features support should be added for JavaScript.
@@ -216,7 +222,7 @@ if (!defined("EM_i18n_POLYFILL_DECLARED")) {
          * Loads a language file.
          * @param string $language The name of the language to load (case sensitive!).
          */
-        public function load($language) {
+        public function loadLanguage($language) {
 
             // Check the correspondig file exists.
             $path = $this->module->getModulePath(). "lang";
@@ -255,26 +261,38 @@ if (!defined("EM_i18n_POLYFILL_DECLARED")) {
             if (!isset($this->framework)) {
                 // Substitute the polyfill and load strings from default language.
                 $this->framework = new EMi18nPolyfill($this);
-                $this->framework->load($default_language);
+                $this->framework->loadLanguage($default_language);
             }
             else if (!method_exists($this->framework, "tt")) {
                 // Framework without localization support.
                 // Class methods will proxy to those provided by the polyfill.
                 $this->i18n_polyfill = new EMi18nPolyfill($this);
-                $this->i18n_polyfill->load($default_language);
+                $this->i18n_polyfill->loadLanguage($default_language);
             } 
             else {
                 // All good. The available EM framework supports localization.
                 $this->native = true;
             }
         }
-        
+
         /**
          * Checks whether REDCap has native localization support.
          * @return bool True when native localization support is present, false otherwise.
          */
         public function hasNativeLocalizationSupport() {
             return $this->native;
+        }
+
+        /**
+         * Loads a language file.
+         * This does nothing if REDCap has native EM localization support.
+         * 
+         * @param string $language The name of the language to load (case sensitive!).
+         */
+        public function loadLanguage($language) {
+            if (!$this->hasNativeLocalizationSupport()) {
+                $this->i18n_polyfill->loadLanguage($language);
+            }
         }
 
         /**
@@ -285,16 +303,42 @@ if (!defined("EM_i18n_POLYFILL_DECLARED")) {
          * 
          * @return string The translation (with interpolations).
          */
-            function tt($key, ...$values) {
+        public function tt($key, ...$values) {
             // Proxy.
             if (count($values)) {
-                return $this->i18n_polyfill == null ? $this->framework->tt($key, $values) : $this->i18n_polyfill->tt($key, $values);
+                return $this->i18n_polyfill == null ? 
+                    $this->framework->tt($key, $values) : 
+                    $this->i18n_polyfill->tt($key, $values);
             }
             else {
-                return $this->i18n_polyfill == null ? $this->framework->tt($key) : $this->i18n_polyfill->tt($key);
+                return $this->i18n_polyfill == null ? 
+                    $this->framework->tt($key) : 
+                    $this->i18n_polyfill->tt($key);
             }
         }
         
+       	/**
+         * Returns a JSON-encoded translation for the given global language key.
+         * 
+         * @param string $key The language key.
+         * @param mixed $values The values to be used for interpolation. If the first parameter is a (sequential) array, it's members will be used and any further parameters ignored.
+         * 
+         * @return string The translation (with interpolations) encoded for assignment to JS variables.
+         */
+        public function tt_js($key, ...$values) {
+            // Proxy.
+            if (count($values)) {
+                return $this->i18n_polyfill == null ? 
+                    $this->framework->tt_js($key, $values) : 
+                    $this->i18n_polyfill->tt_js($key, $values);
+            }
+            else {
+                return $this->i18n_polyfill == null ?
+                    $this->framework->tt_js($key) : 
+                    $this->i18n_polyfill->tt_js($key);
+            }
+        }
+
         /**
          * Declares to the EM framework that language features support should be added for JavaScript.
          * Call this before using any of the features such as addToJSLanguageStore().
