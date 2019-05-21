@@ -43,15 +43,63 @@
         },
         {
             "key": "remove_codebook_link",
-            "name": "Remove the <i>My Projects</i> link from menu",
+            "name": "Remove the <i>My Projects</i> link from the menu",
             "tt_name": "remove_codebook_link",
             "type": "checkbox",
             "repeatable": false
         },
         {
             "key": "remove_myprojects_link",
-            "name": "Remove the <i>Codebook</i> link from menu",
+            "name": "Remove the <i>Codebook</i> link from the menu",
             "tt_name": "remove_myprojects_link",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "remove_videotutorials_link",
+            "name": "Remove the <i>Video Tutorials</i> link from the menu",
+            "tt_name": "remove_videotutorials_link",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "remove_help_link",
+            "name": "Remove the <i>Help &amp; FAQ</i> link from the menu",
+            "tt_name": "remove_help_link",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "modify_help_link",
+            "name": "Modify the <i>Help &amp; FAQ</i> link (new text and link target)",
+            "tt_name": "modify_help_link",
+            "type": "checkbox",
+            "repeatable": false
+        },
+        {
+            "key": "modify_help_text",
+            "name": "Link text (leave blank to keep the original text)",
+            "tt_name": "modify_help_text",
+            "type": "text",
+            "branchingLogic": {
+                "field": "modify_help_link",
+                "value": true
+            }
+        },
+        {
+            "key": "modify_help_url",
+            "name": "Web address (include http/https; leave blank to keep the original behavior)",
+            "tt_name": "modify_help_url",
+            "type": "text",
+            "branchingLogic": {
+                "field": "modify_help_link",
+                "value": true
+            }
+        },
+        {
+            "key": "remove_suggestfeature_link",
+            "name": "Remove the <i>Suggest a New Feature</i> link from the menu",
+            "tt_name": "remove_suggestfeature_link",
             "type": "checkbox",
             "repeatable": false
         },

@@ -15,12 +15,14 @@ use ExternalModules\TranslatableExternalModule;
 class UITrimmerExternalModule extends TranslatableExternalModule {
 
     private $settings;
+    private $scriptlets = array();
 
 
     function __construct() {
         parent::__construct("English");
         // Initialize settings.
         $this->settings = new UITrimmerSettings($this);
+        $this->addScriptlets();
     }
 
     function redcap_every_page_top($project_id = null) {
@@ -31,50 +33,73 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
 
         // Remove Codebook link.
         if ($doIt && $this->settings->removeCodebookLink) {
-            $this->includeScriptlet("remove-codebook-link");
+            $this->includeScriptlet(ActionsEnum::remove_codebook_link);
         }
 
         // Remove My Projects link.
         if ($doIt && $this->settings->removeMyProjectsLink) {
-            $this->includeScriptlet("remove_myprojects_link");
+            $this->includeScriptlet(ActionsEnum::remove_myprojects_link);
+        }
+
+        // Remove Video Tutorials link.
+        if ($doIt && $this->settings->removeVideoTutorialsLink) {
+            $this->includeScriptlet(ActionsEnum::remove_videotutorials_link);
+        }
+
+        // Remove Help & FAQ link.
+        if ($doIt && $this->settings->removeHelpLink) {
+            $this->includeScriptlet(ActionsEnum::remove_help_link);
+        }
+
+        // Modify Help & FAQ link.
+        if ($doIt && !$this->settings->removeHelpLink && $this->settings->modifyHelpLink) {
+            $this->useJSLanguageFeatures();
+            $this->addNewToJSLanguageStore("modified_text", $this->settings->modifiedHelpLinkText);
+            $this->addNewToJSLanguageStore("modified_url", $this->settings->modifiedHelpLinkUrl);
+            $this->includeScriptlet(ActionsEnum::modify_help_link);
+        }
+
+        // Remove Suggest a New Feature link.
+        if ($doIt && $this->settings->removeSuggestFeatureLink) {
+            $this->includeScriptlet(ActionsEnum::remove_suggestfeature_link);
         }
 
         // Remove empty menu sections.
         if ($doIt && $this->settings->removeEmptyMenuSections) {
-            $this->includeScriptlet("remove_empty_menu_sections");
+            $this->includeScriptlet(ActionsEnum::remove_empty_menu_sections);
         }
 
         // Remove Current Users.
         if ($doIt && $this->settings->removeCurrentUsersBox) {
-            $this->includeScriptlet("remove-current-users");
+            $this->includeScriptlet(ActionsEnum::remove_current_users);
         }
 
         // Remove Upcoming Calendar Events.
         if ($doIt && $this->settings->removeUpcomingEventsBox) {
-            $this->includeScriptlet("remove-upcoming-events");
+            $this->includeScriptlet(ActionsEnum::remove_upcoming_events);
         }
 
         // Remove Action buttons on data entry pages.
         if ($doIt && $this->settings->removeTopActions) {
-            $this->includeScriptlet("remove_top_actions");
+            $this->includeScriptlet(ActionsEnum::remove_top_actions);
         }
 
         // Remove Forgot your password link on the login page.
         if ($doIt && $this->settings->removeForgotPasswordLink) {
-            $this->includeScriptlet("remove_forgot_password");
+            $this->includeScriptlet(ActionsEnum::remove_forgot_password);
         }
 
         // Remove items below login on the login page.
         if ($doIt && $this->settings->removeItemsBelowLogin) {
-            $this->includeScriptlet("remove_items_below_login");
+            $this->includeScriptlet(ActionsEnum::remove_items_below_login);
         }
 
         // Reveal
         echo "<script>$(function() { $('body').show() })</script>";
     }
 
-    private $scriptlets = array (
-        "remove-current-users" => 
+    private function addScriptlets() {
+        $this->scriptlets[ActionsEnum::remove_current_users] =
             "$(function() {
                 const eltoremove = $('div#user_list')
                 if (eltoremove.length == 1) {
@@ -84,8 +109,8 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
                         parent.remove();
                     }
                 }
-            })",
-        "remove-upcoming-events" => 
+            })";
+        $this->scriptlets[ActionsEnum::remove_upcoming_events] =
             "$(function() {
                 const eltoremove = $('div#cal_table')
                 if (eltoremove.length == 1) {
@@ -95,8 +120,8 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
                         parent.remove();
                     }
                 }
-            })",
-        "remove-codebook-link" => 
+            })";
+        $this->scriptlets[ActionsEnum::remove_codebook_link] = 
             "$(function() {
                 const eltoremove = $('div.menubox a[href*=\"Design/data_dictionary_codebook\"]').parent()
                 if (eltoremove.length == 1) {
@@ -106,23 +131,55 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
                     }
                     eltoremove.remove();
                 }
-            })",
-        "remove_empty_menu_sections" =>
+            })";
+        $this->scriptlets[ActionsEnum::remove_help_link] =
+            "$(function() {
+                const eltoremove = $('div.menubox a[onclick*=\"helpPopup\"]').parent()
+                if (eltoremove.length === 1) eltoremove.remove()
+            })";
+        $this->scriptlets[ActionsEnum::modify_help_link] =
+            "$(function() {
+                const elToModify = $('div.menubox a[onclick*=\"helpPopup\"]') 
+                if (elToModify.length === 1) {
+                    const em = \$lang.getEMHelper('redcap_ui_trimmer')
+                    const text = em.get('modified_text')
+                    if (text.length > 0) elToModify.html(text)
+                    const url = em.get('modified_url')
+                    if (url.length > 0) {
+                        elToModify.attr('href', url)
+                        elToModify.prop('onclick', null).off('click')
+                        elToModify.attr('target', '_blank')
+                    }
+                }
+            })";
+        $this->scriptlets[ActionsEnum::remove_videotutorials_link] =
+            "$(function() {
+                let eltoremove = $('div.menubox a[onclick*=\"#menuvids\"]').parent()
+                if (eltoremove.length === 1) eltoremove.remove()
+                eltoremove = $('#menuvids')
+                if (eltoremove.length === 1) eltoremove.remove()
+            })";
+        $this->scriptlets[ActionsEnum::remove_suggestfeature_link] =
+            "$(function() {
+                let eltoremove = $('div.menubox a[href*=\"vanderbilt.edu/enduser_survey\"]').parent()
+                if (eltoremove.length === 1) eltoremove.remove()
+            })";
+        $this->scriptlets[ActionsEnum::remove_empty_menu_sections] = 
             "$(function() {
                 $('div#west div.x-panel-body').each(function() {
                     if ($(this).text().length == 0) {
                         $(this).parent().parent().hide()
                     }
                 })
-            })",
-        "remove_top_actions" => 
+            })";
+        $this->scriptlets[ActionsEnum::remove_top_actions] =
             "$(function() {
                 const eltoremove = $('div#dataEntryTopOptionsButtons')
                 if (eltoremove.length == 1) {
                     eltoremove.remove();
                 }
-            })",
-        "remove_forgot_password" => 
+            })";
+        $this->scriptlets[ActionsEnum::remove_forgot_password] =
             "$(function() {
                 const eltoremove = $('a[href*=\"Authentication/password_recovery\"')
                 if (eltoremove.length == 1) {
@@ -132,15 +189,15 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
                         parent.remove();
                     }
                 }
-            })",
-        "remove_items_below_login" => 
+            })";
+        $this->scriptlets[ActionsEnum::remove_items_below_login] =
             "$(function() {
                 const eltoremove = $('div#left_col').siblings('div.row')
                 if (eltoremove.length == 1) {
                     eltoremove.remove()
                 }
-            })",
-        "remove_myprojects_link" => 
+            })";
+        $this->scriptlets[ActionsEnum::remove_myprojects_link] =
             "$(function() {
                 const eltoremove = $('div.menubox a[href*=\"index.php?action=myprojects\"]')
                 eltoremove.each(function() {
@@ -157,8 +214,8 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
                         el.removeAttr('href')
                     }
                 })
-            })",
-    );
+            })";
+    }
 
     private function includeScriptlet($name) {
         if ($this->settings->debugMode) {
@@ -170,6 +227,20 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
     }
 }
 
+class ActionsEnum {
+    const modify_help_link = "modify_help_link";
+    const remove_codebook_link = "remove_codebook_link";
+    const remove_current_users = "remove_current_users";
+    const remove_empty_menu_sections = "remove_empty_menu_sections";
+    const remove_forgot_password = "remove_forgot_password";
+    const remove_help_link = "remove_help_link";
+    const remove_items_below_login = "remove_items_below_login";
+    const remove_myprojects_link = "remove_myprojects_link";
+    const remove_suggestfeature_link = "remove_suggestfeature_link";
+    const remove_top_actions = "remove_top_actions";
+    const remove_upcoming_events = "remove_upcoming_events";
+    const remove_videotutorials_link = "remove_videotutorials_link";
+}
 /**
  * Helper class for retrieving module config.
  */
@@ -182,12 +253,18 @@ class UITrimmerSettings {
     
     public $removeCodebookLink = false;
     public $removeMyProjectsLink = false;
+    public $removeVideoTutorialsLink = false;
+    public $removeHelpLink = false;
+    public $removeSuggestFeatureLink = false;
     public $removeEmptyMenuSections = false;
     public $removeCurrentUsersBox = false;
     public $removeUpcomingEventsBox = false;
     public $removeTopActions = false;
     public $removeForgotPasswordLink = false;
     public $removeItemsBelowLogin = false;
+    public $modifyHelpLink = false;
+    public $modifiedHelpLinkText = "";
+    public $modifiedHelpLinkUrl = "";
 
     function __construct($module) 
     {
@@ -200,12 +277,18 @@ class UITrimmerSettings {
         if ($this->isProject) {
             $this->removeCodebookLink = $this->getPS("remove_codebook_link", false);
             $this->removeMyProjectsLink = $this->getPS("remove_myprojects_link", false);
+            $this->removeVideoTutorialsLink = $this->getPS("remove_videotutorials_link", false);
+            $this->removeHelpLink = $this->getPS("remove_help_link", false);
+            $this->removeSuggestFeatureLink = $this->getPS("remove_suggestfeature_link", false);
             $this->removeCurrentUsersBox = $this->getPS("remove_current_users", false);
             $this->removeUpcomingEventsBox = $this->getPS("remove_upcoming_events", false);
             $this->removeEmptyMenuSections = $this->getPS("remove_empty_menu_sections", false);
             $this->removeTopActions = $this->getPS("remove_top_actions", false);
             $this->removeForgotPasswordLink = $this->getPS("remove_forgot_password", false);
             $this->removeItemsBelowLogin = $this->getPS("remove_items_below_login", false);
+            $this->modifyHelpLink = $this->getPS("modify_help_link", false);
+            $this->modifiedHelpLinkText = $this->getPS("modify_help_text", "");
+            $this->modifiedHelpLinkUrl = $this->getPS("modify_help_url", "");
         }
     }
 
