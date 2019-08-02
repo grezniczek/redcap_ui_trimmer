@@ -15,9 +15,26 @@ A REDCap External Module to remove some of REDCap's menus and other UI elements.
 
 ### System-level settings
 
-- **Debug mode** - when enabled, JavaScript will not be inlined but called as separat script files. This facilitates debugging.
+- **Debug mode** - when enabled, JavaScript will not be inlined but called as separate script files. This facilitates debugging.
 - **Enable for Super Users** - Normally, any UI-removals do not apply for Super Users. Activate this setting to have the module remove UI elements even for them.
 
 ### Project-level settings
 
-- Toggle removal of various UI elements.
+Toggle removal of or change the appearance of various UI elements:
+
+- Remove the _My Projects_ link from the menu
+- Remove the _Codebook_ link from the menu
+- Remove the _Video Tutorials_ link from the menu
+- Remove the _Help & FAQ_ link from the menu
+- Modify the _Help & FAQ_ link (text, link target)
+- Remove the _Suggest a New Feature_ link from the menu
+- Remove all empty menu sections
+- Remove items from **Project Home**:
+  - Current Users
+  - Upcoming Calendar Event
+- Remove items from **Data Entry** pages:
+  - Remove actions
+- Remove items from the **Login** page:
+  - Remove the _Forgot your password?_ link
+  - Remove the items below the line under the _Log In_ button
+  
