@@ -4,7 +4,7 @@ A REDCap External Module to remove some of REDCap's menus and other UI elements.
 
 ## Requirements
 
-- REDCAP 8.1.0 or newer (tested with 9.0.1).
+- REDCAP 9.5.0 or newer (tested with 9.5.8).
 
 ## Installation
 
