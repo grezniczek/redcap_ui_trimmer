@@ -2,9 +2,7 @@
 
 namespace RUB\UITrimmerExternalModule;
 
-require_once "em-i18n-polyfill/em-i18n-polyfill.php";
-
-use ExternalModules\TranslatableExternalModule;
+use ExternalModules\AbstractExternalModule;
 
 /**
  * ExternalModule class for Localization Demo.
@@ -12,20 +10,15 @@ use ExternalModules\TranslatableExternalModule;
  * console as info, warning, or error, depending on the module's 
  * settings.
  */
-class UITrimmerExternalModule extends TranslatableExternalModule {
+class UITrimmerExternalModule extends AbstractExternalModule {
 
     private $settings;
     private $scriptlets = array();
 
+    function redcap_every_page_top($project_id = null) {
 
-    function __construct() {
-        parent::__construct("English");
-        // Initialize settings.
         $this->settings = new UITrimmerSettings($this);
         $this->addScriptlets();
-    }
-
-    function redcap_every_page_top($project_id = null) {
 
         echo "<style>body{display:none}</style>";
 
@@ -53,10 +46,7 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
 
         // Modify Help & FAQ link.
         if ($doIt && !$this->settings->removeHelpLink && $this->settings->modifyHelpLink) {
-            $this->useJSLanguageFeatures();
-            $this->addNewToJSLanguageStore("modified_text", $this->settings->modifiedHelpLinkText);
-            $this->addNewToJSLanguageStore("modified_url", $this->settings->modifiedHelpLinkUrl);
-            $this->includeScriptlet(ActionsEnum::modify_help_link);
+            $this->includeScriptlet(ActionsEnum::modify_help_link, true);
         }
 
         // Remove Suggest a New Feature link.
@@ -141,10 +131,9 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
             "$(function() {
                 const elToModify = $('div.menubox a[onclick*=\"helpPopup\"]') 
                 if (elToModify.length === 1) {
-                    const em = \$lang.getEMHelper('redcap_ui_trimmer')
-                    const text = em.get('modified_text')
+                    const text = " . json_encode($this->settings->modifiedHelpLinkText) . "
                     if (text.length > 0) elToModify.html(text)
-                    const url = em.get('modified_url')
+                    const url = " . json_encode($this->settings->modifiedHelpLinkUrl) . "
                     if (url.length > 0) {
                         elToModify.attr('href', url)
                         elToModify.prop('onclick', null).off('click')
@@ -217,8 +206,8 @@ class UITrimmerExternalModule extends TranslatableExternalModule {
             })";
     }
 
-    private function includeScriptlet($name) {
-        if ($this->settings->debugMode) {
+    private function includeScriptlet($name, $inline = false) {
+        if (!$inline && $this->settings->debugMode) {
             echo '<script type="text/javascript" src="' . $this->framework->getUrl("js/{$name}.js") . '"></script>';
         }
         else {
