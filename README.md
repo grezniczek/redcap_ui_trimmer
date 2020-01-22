@@ -37,4 +37,10 @@ Toggle removal of or change the appearance of various UI elements:
 - Remove items from the **Login** page:
   - Remove the _Forgot your password?_ link
   - Remove the items below the line under the _Log In_ button
-  
+
+## Changelog
+
+Version | Changes
+------- | -----------
+1.0.1   | Fix incompatibility with REDCap version 9.5.0.
+1.0.0   | Initial release.
