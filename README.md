@@ -42,5 +42,6 @@ Toggle removal of or change the appearance of various UI elements:
 
 Version | Changes
 ------- | -----------
+1.0.2   | Checks for presence of jQuery to prevent JS errors.
 1.0.1   | Fix incompatibility with REDCap version 9.5.0.
 1.0.0   | Initial release.
