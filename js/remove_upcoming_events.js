@@ -1,5 +1,5 @@
 // @ts-check
-$(function() {
+if ($) $(function() {
     const eltoremove = $('div#cal_table')
     if (eltoremove.length == 1) {
         const parent = eltoremove.parent()

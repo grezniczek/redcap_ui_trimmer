@@ -85,12 +85,24 @@ class UITrimmerExternalModule extends AbstractExternalModule {
         }
 
         // Reveal
-        echo "<script>$(function() { $('body').show() })</script>";
+        echo "<script>
+            (function() {
+                var callback = function() {
+                    document.body.style.display = 'block'
+                }
+                if (document.readyState === 'complete' || (document.readyState !== 'loading' && !document.documentElement.doScroll)) {
+                    callback()
+                }
+                else {
+                    document.addEventListener('DOMContentLoaded', callback)
+                }
+            })()
+        </script>";
     }
 
     private function addScriptlets() {
         $this->scriptlets[ActionsEnum::remove_current_users] =
-            "$(function() {
+            "if ($) $(function() {
                 const eltoremove = $('div#user_list')
                 if (eltoremove.length == 1) {
                     const parent = eltoremove.parent()
@@ -101,7 +113,7 @@ class UITrimmerExternalModule extends AbstractExternalModule {
                 }
             })";
         $this->scriptlets[ActionsEnum::remove_upcoming_events] =
-            "$(function() {
+            "if ($) $(function() {
                 const eltoremove = $('div#cal_table')
                 if (eltoremove.length == 1) {
                     const parent = eltoremove.parent()
@@ -112,7 +124,7 @@ class UITrimmerExternalModule extends AbstractExternalModule {
                 }
             })";
         $this->scriptlets[ActionsEnum::remove_codebook_link] = 
-            "$(function() {
+            "if ($) $(function() {
                 const eltoremove = $('div.menubox a[href*=\"Design/data_dictionary_codebook\"]').parent()
                 if (eltoremove.length == 1) {
                     const elbefore = eltoremove.first().prev('span')
@@ -123,12 +135,12 @@ class UITrimmerExternalModule extends AbstractExternalModule {
                 }
             })";
         $this->scriptlets[ActionsEnum::remove_help_link] =
-            "$(function() {
+            "if ($) $(function() {
                 const eltoremove = $('div.menubox a[onclick*=\"helpPopup\"]').parent()
                 if (eltoremove.length === 1) eltoremove.remove()
             })";
         $this->scriptlets[ActionsEnum::modify_help_link] =
-            "$(function() {
+            "if ($) $(function() {
                 const elToModify = $('div.menubox a[onclick*=\"helpPopup\"]') 
                 if (elToModify.length === 1) {
                     const text = " . json_encode($this->settings->modifiedHelpLinkText) . "
@@ -142,19 +154,19 @@ class UITrimmerExternalModule extends AbstractExternalModule {
                 }
             })";
         $this->scriptlets[ActionsEnum::remove_videotutorials_link] =
-            "$(function() {
+            "if ($) $(function() {
                 let eltoremove = $('div.menubox a[onclick*=\"#menuvids\"]').parent()
                 if (eltoremove.length === 1) eltoremove.remove()
                 eltoremove = $('#menuvids')
                 if (eltoremove.length === 1) eltoremove.remove()
             })";
         $this->scriptlets[ActionsEnum::remove_suggestfeature_link] =
-            "$(function() {
+            "if ($) $(function() {
                 let eltoremove = $('div.menubox a[href*=\"vanderbilt.edu/enduser_survey\"]').parent()
                 if (eltoremove.length === 1) eltoremove.remove()
             })";
         $this->scriptlets[ActionsEnum::remove_empty_menu_sections] = 
-            "$(function() {
+            "if ($) $(function() {
                 $('div#west div.x-panel-body').each(function() {
                     if ($(this).text().length == 0) {
                         $(this).parent().parent().hide()
@@ -162,14 +174,14 @@ class UITrimmerExternalModule extends AbstractExternalModule {
                 })
             })";
         $this->scriptlets[ActionsEnum::remove_top_actions] =
-            "$(function() {
+            "if ($) $(function() {
                 const eltoremove = $('div#dataEntryTopOptionsButtons')
                 if (eltoremove.length == 1) {
                     eltoremove.remove();
                 }
             })";
         $this->scriptlets[ActionsEnum::remove_forgot_password] =
-            "$(function() {
+            "if ($) $(function() {
                 const eltoremove = $('a[href*=\"Authentication/password_recovery\"')
                 if (eltoremove.length == 1) {
                     const parent = eltoremove.parent()
@@ -180,14 +192,14 @@ class UITrimmerExternalModule extends AbstractExternalModule {
                 }
             })";
         $this->scriptlets[ActionsEnum::remove_items_below_login] =
-            "$(function() {
+            "if ($) $(function() {
                 const eltoremove = $('div#left_col').siblings('div.row')
                 if (eltoremove.length == 1) {
                     eltoremove.remove()
                 }
             })";
         $this->scriptlets[ActionsEnum::remove_myprojects_link] =
-            "$(function() {
+            "if ($) $(function() {
                 const eltoremove = $('div.menubox a[href*=\"index.php?action=myprojects\"]')
                 eltoremove.each(function() {
                     let el = $(this)

@@ -1,5 +1,5 @@
 // @ts-check
-$(function() {
+if ($) $(function() {
     const eltoremove = $('div.menubox a[href*="index.php?action=myprojects"]')
     eltoremove.each(function() {
         let el = $(this)
