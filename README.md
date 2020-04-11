@@ -4,7 +4,7 @@ A REDCap External Module to remove some of REDCap's menus and other UI elements.
 
 ## Requirements
 
-- REDCAP 9.5.0 or newer (tested with 9.5.8).
+- REDCAP 9.5.0 or newer (tested with 9.5.8, 9.8.2).
 
 ## Installation
 
@@ -38,10 +38,15 @@ Toggle removal of or change the appearance of various UI elements:
   - Remove the _Forgot your password?_ link
   - Remove the items below the line under the _Log In_ button
 
+## Testing
+
+Instructions for testing the module can be found [here](?prefix=redcap_ui_trimmer&page=tests/UITrimmerManualTest.md).
+
 ## Changelog
 
 Version | Changes
 ------- | -----------
-1.0.2   | Checks for presence of jQuery to prevent JS errors.
+1.0.3   | Add instructions for testing the module.
+1.0.2   | Add checks for presence of jQuery to prevent JS errors.
 1.0.1   | Fix incompatibility with REDCap version 9.5.0.
 1.0.0   | Initial release.
