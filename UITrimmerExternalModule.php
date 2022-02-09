@@ -22,7 +22,9 @@ class UITrimmerExternalModule extends AbstractExternalModule {
 
         echo "<style>body{display:none}</style>";
 
-        $doIt = SUPER_USER != 1 || $this->settings->forSuperUsers;
+        $super_user = defined("SUPER_USER") && SUPER_USER == 1;
+
+        $doIt =  !$super_user || $this->settings->forSuperUsers;
 
         // Remove Codebook link.
         if ($doIt && $this->settings->removeCodebookLink) {

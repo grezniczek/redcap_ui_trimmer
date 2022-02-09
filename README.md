@@ -46,6 +46,7 @@ Instructions for testing the module can be found [here](?prefix=redcap_ui_trimme
 
 Version | Changes
 ------- | -----------
+1.0.4   | PHP8 compatibility.
 1.0.3   | Add instructions for testing the module.
 1.0.2   | Add checks for presence of jQuery to prevent JS errors.
 1.0.1   | Fix incompatibility with REDCap version 9.5.0.
