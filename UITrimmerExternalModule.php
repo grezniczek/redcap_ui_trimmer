@@ -22,7 +22,7 @@ class UITrimmerExternalModule extends AbstractExternalModule {
 
         echo "<style>body{display:none}</style>";
 
-        $super_user = defined("SUPER_USER") && SUPER_USER == 1;
+        $super_user = method_exists("UserRights", "isSUperUserNotImpersonator") ? \UserRights::isSuperUserNotImpersonator() : (defined("SUPER_USER") && SUPER_USER == 1);
 
         $doIt =  !$super_user || $this->settings->forSuperUsers;
 
