@@ -20,7 +20,7 @@ class UITrimmerExternalModule extends AbstractExternalModule {
         $this->settings = new UITrimmerSettings($this);
         $this->addScriptlets();
 
-        echo "<style>body{display:none}</style>";
+        echo "<script>document.body.style.display = 'none';</script>";
 
         $super_user = method_exists("UserRights", "isSUperUserNotImpersonator") ? \UserRights::isSuperUserNotImpersonator() : (defined("SUPER_USER") && SUPER_USER == 1);
 
@@ -90,9 +90,9 @@ class UITrimmerExternalModule extends AbstractExternalModule {
         echo "<script>
             (function() {
                 var callback = function() {
+                    debugger
                     document.body.style.display = 'block'
                 }
-                debugger
                 if (document.readyState === 'complete' || (document.readyState !== 'loading' && !document.documentElement.doScroll)) {
                     callback()
                 }

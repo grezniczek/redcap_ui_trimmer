@@ -46,6 +46,7 @@ Instructions for testing the module can be found [here](?prefix=redcap_ui_trimme
 
 Version | Changes
 ------- | -----------
+1.0.7   | Bugfix (caused the email users page to blank).
 1.0.6   | Support impersonation feature.
 1.0.5   | Do not remove External Modules section when the Manage and Log links are present.
 1.0.4   | PHP8 compatibility.
