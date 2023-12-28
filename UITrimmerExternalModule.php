@@ -22,7 +22,7 @@ class UITrimmerExternalModule extends AbstractExternalModule {
 
         echo "<style>body{display:none}</style>";
 
-        $super_user = defined("SUPER_USER") && SUPER_USER == 1;
+        $super_user = method_exists("UserRights", "isSUperUserNotImpersonator") ? \UserRights::isSuperUserNotImpersonator() : (defined("SUPER_USER") && SUPER_USER == 1);
 
         $doIt =  !$super_user || $this->settings->forSuperUsers;
 
@@ -172,9 +172,12 @@ class UITrimmerExternalModule extends AbstractExternalModule {
             "if ($) $(function() {
                 $('div#west div.x-panel-body').each(function() {
                     if ($(this).text().length == 0) {
-                        $(this).parent().parent().hide()
+                        const \$menuSection = $(this).parent().parent();
+                        if (\$menuSection.find('a').length < 2) {
+                            \$menuSection.hide();
+                        }
                     }
-                })
+                });
             })";
         $this->scriptlets[ActionsEnum::remove_top_actions] =
             "if ($) $(function() {
