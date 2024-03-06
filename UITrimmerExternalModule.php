@@ -90,7 +90,6 @@ class UITrimmerExternalModule extends AbstractExternalModule {
         echo "<script>
             (function() {
                 var callback = function() {
-                    debugger
                     document.body.style.display = 'block'
                 }
                 if (document.readyState === 'complete' || (document.readyState !== 'loading' && !document.documentElement.doScroll)) {
