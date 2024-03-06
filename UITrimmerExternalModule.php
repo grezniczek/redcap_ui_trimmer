@@ -255,6 +255,7 @@ class UITrimmerSettings {
     private $m;
 
     public $debugMode = false;
+    public $isProject = false;
     public $forSuperUsers = false;
     
     public $removeCodebookLink = false;
