@@ -5,10 +5,8 @@ namespace RUB\UITrimmerExternalModule;
 use ExternalModules\AbstractExternalModule;
 
 /**
- * ExternalModule class for Localization Demo.
- * This demo module will get a string and print it to the browser's
- * console as info, warning, or error, depending on the module's 
- * settings.
+ * ExternalModule class for UI Trimmer.
+ * This module will optionally remove a number of UI elements from REDCap pages
  */
 class UITrimmerExternalModule extends AbstractExternalModule {
 
