@@ -3,5 +3,5 @@ node_modules/ export-ignore
 *.code-workspace export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
-package-lock.json
-package.json
+package-lock.json export-ignore
+package.json export-ignore
