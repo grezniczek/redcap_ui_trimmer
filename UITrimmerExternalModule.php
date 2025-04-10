@@ -13,7 +13,7 @@ class UITrimmerExternalModule extends AbstractExternalModule {
     private $settings;
     private $scriptlets = array();
 
-    function redcap_every_page_top($project_id = null) {
+    function redcap_every_page_top($project_id) {
 
         $this->settings = new UITrimmerSettings($this);
         $this->addScriptlets();
@@ -162,7 +162,7 @@ class UITrimmerExternalModule extends AbstractExternalModule {
             })";
         $this->scriptlets[ActionsEnum::remove_suggestfeature_link] =
             "if ($) $(function() {
-                let eltoremove = $('div.menubox a[href*=\"vanderbilt.edu/enduser_survey\"]').parent()
+                const eltoremove = $('div.menubox a[href*=\"/enduser_survey\"]').parent();
                 if (eltoremove.length === 1) eltoremove.remove()
             })";
         $this->scriptlets[ActionsEnum::remove_empty_menu_sections] = 
