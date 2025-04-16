@@ -155,7 +155,7 @@ class UITrimmerExternalModule extends AbstractExternalModule {
             })";
         $this->scriptlets[ActionsEnum::remove_videotutorials_link] =
             "if ($) $(function() {
-                let eltoremove = $('div.menubox a[onclick*=\"#menuvids\"]').parent()
+                let eltoremove = $('div.menubox a[onclick*=\"#menuvids\"], div.menubox a[href=\"/index.php?action=training\"]').parent()
                 if (eltoremove.length === 1) eltoremove.remove()
                 eltoremove = $('#menuvids')
                 if (eltoremove.length === 1) eltoremove.remove()
