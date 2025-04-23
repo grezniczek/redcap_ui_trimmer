@@ -22,7 +22,7 @@ class UITrimmerExternalModule extends AbstractExternalModule {
 
         $super_user = method_exists("UserRights", "isSUperUserNotImpersonator") ? \UserRights::isSuperUserNotImpersonator() : (defined("SUPER_USER") && SUPER_USER == 1);
 
-        $doIt =  !$super_user || $this->settings->forSuperUsers;
+        $doIt = !$super_user || $this->settings->forSuperUsers;
 
         // Remove Codebook link.
         if ($doIt && $this->settings->removeCodebookLink) {
@@ -155,7 +155,7 @@ class UITrimmerExternalModule extends AbstractExternalModule {
             })";
         $this->scriptlets[ActionsEnum::remove_videotutorials_link] =
             "if ($) $(function() {
-                let eltoremove = $('div.menubox a[onclick*=\"#menuvids\"], div.menubox a[href=\"/index.php?action=training\"]').parent()
+                let eltoremove = $('div.menubox a[onclick*=\"#menuvids\"], div.menubox a[href*=\"?action=training\"]').parent()
                 if (eltoremove.length === 1) eltoremove.remove()
                 eltoremove = $('#menuvids')
                 if (eltoremove.length === 1) eltoremove.remove()

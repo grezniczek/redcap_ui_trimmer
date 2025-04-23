@@ -46,6 +46,7 @@ Instructions for testing the module can be found [here](?prefix=redcap_ui_trimme
 
 Version | Changes
 ------- | -----------
+1.0.11  | Bugfix: Removal of _Video Tutorials_ failed on some systems.
 1.0.10  | Bugfix: Remove _Video Tutorials_ failed because of an updated link in REDCap.
 1.0.9   | Bugfix: Remove _Suggest a New Feature_ failed because of the Vanderbilt/VUMC link change.
 1.0.8   | Critical Bugfix (a `debugger` statment was accidentally left in the code).
